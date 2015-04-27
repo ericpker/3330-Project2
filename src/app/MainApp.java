@@ -230,11 +230,24 @@ public class MainApp {
 	public void queryRolePrivileges() {
 		System.out.print("Enter Role Name:");
 		String roleName = input.nextLine();
+		try {
+			driver.queryRoleCanAccess(roleName);
+		} catch (SQLException e) {
+			System.out.println("Unable to query Role");
+			e.printStackTrace();
+		}
+		
 	}
 	
 	public void queryPrivilegsUserAccount() {
 		System.out.print("Enter User ID:");
 		String idNum = input.nextLine();
+		try {
+			driver.queryUserHasPrivilege(idNum);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public void queryIfPrivilegeIsGrantedToUser() {

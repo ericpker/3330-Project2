@@ -50,8 +50,10 @@ public class Driver {
 	PreparedStatement queryRelationPrivilege;
 	PreparedStatement queryUserRoleAttribute;
 	PreparedStatement queryUserRolePrivilege;
+	
 	PreparedStatement queryRolePrivilege;
-		
+	PreparedStatement queryRoleCanAccess;
+	PreparedStatement querySpecificUserHasRole;
 	/**
 	 * 
 	 */
@@ -133,8 +135,13 @@ public class Driver {
 			queryUserRolePrivilege = connection.prepareStatement(stmt);
 			
 			//Add stuff here for part 8...
-			stmt="";
-			queryRolePrivilege = connection.prepareStatement(stmt);
+			stmt="SELECT * FROM CAN_ACCESS WHERE ROLE_NAME = ?";
+			queryRoleCanAccess = connection.prepareStatement(stmt);
+			stmt="SELECT * FROM USER_ROLE_PRIVILEGE WHERE ROLE_NAME = ?";
+			queryUserRolePrivilege = connection.prepareStatement(stmt);
+			stmt="SELECT * FROM HAS_ROLE WHERE USER_ID_NUMBER = ?";
+			querySpecificUserHasRole = connection.prepareStatement(stmt);
+			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -585,6 +592,41 @@ public class Driver {
 		    System.out.println("");
 		}
 	    System.out.println("");
+	}
+	
+	public void queryRoleCanAccess (String roleName) throws SQLException {
+		queryRoleCanAccess.clearParameters();
+		queryRoleCanAccess.setString(1, roleName);
+		ResultSet resultSet = queryRoleCanAccess.executeQuery();
+		ResultSetMetaData rsmd = resultSet.getMetaData();
+		System.out.printf("%-20s%-20s%-20s",rsmd.getColumnName(1),rsmd.getColumnName(2),rsmd.getColumnName(3));
+		System.out.println();
+		while (resultSet.next()) {
+			System.out.printf("%-20s%-20s%-20s",resultSet.getString(1),resultSet.getString(2),resultSet.getString(3));
+		    System.out.println("");
+		}
+	    System.out.println("");
+	    
+	    queryUserRolePrivilege.clearParameters();
+	    queryUserRolePrivilege.setString(1, roleName);
+	    resultSet = queryUserRolePrivilege.executeQuery();
+		rsmd = resultSet.getMetaData();
+		System.out.printf("%-20s%-20s",rsmd.getColumnName(1),rsmd.getColumnName(2));
+		System.out.println();
+		while (resultSet.next()) {
+			System.out.printf("%-20s%-20s",resultSet.getString(1),resultSet.getString(2));
+		    System.out.println("");
+		}
+	    System.out.println("");
+	}
+	
+	public void queryUserHasPrivilege(String idNum) throws SQLException {
+		querySpecificUserHasRole.clearParameters();
+		querySpecificUserHasRole.setString(1, idNum);
+		ResultSet resultSet = querySpecificUserHasRole.executeQuery();
+		resultSet.next();
+		queryRoleCanAccess(resultSet.getString(2));
+		
 	}
 	
 	private void newFileScanner(File file)
