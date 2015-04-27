@@ -362,6 +362,7 @@ public class Driver {
 		addIsOwner.setString(1, USER_ID_NUMBER);
 		addIsOwner.setString(2, TABLE_NAME);
 		addIsOwner.executeUpdate();
+
 	}
 	/**
 	 * 
@@ -631,8 +632,7 @@ public class Driver {
 		querySpecificUserHasRole.setString(1, idNum);
 		ResultSet resultSet = querySpecificUserHasRole.executeQuery();
 		resultSet.next();
-		queryRoleCanAccess(resultSet.getString(2));
-		
+		queryRoleCanAccess(resultSet.getString(2));		
 	}
 	
 	public void queryIfPrivilegeIsGrantedToUser(String privType, String idNum) throws SQLException {

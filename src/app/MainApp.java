@@ -68,17 +68,28 @@ public class MainApp {
 	
 	public void printAll() {
 		try {
-		driver.queryAccountPrivilege();
-		driver.queryCanAccess();
-		driver.queryHasRole();
-		driver.queryIsOwner();
-		driver.queryRelationPrivilege();
-		driver.queryPrivilege();
-		driver.queryTable();
-		driver.queryUserAccount();
-		driver.queryUserRole();
-		driver.queryUserRoleAttribute();
-		driver.queryUserRolePrivilege();
+			System.out.println("---User Accounts---");
+			driver.queryUserAccount();
+			System.out.println("---User Roles---");
+			driver.queryUserRole();
+			System.out.println("---Role Attributes---");
+			driver.queryUserRoleAttribute();
+			System.out.println("---Has Role Table---");
+			driver.queryHasRole();
+			System.out.println("---Tables---");
+			driver.queryTable();
+			System.out.println("---Owner Table---");
+			driver.queryIsOwner();
+			System.out.println("---Can Access Table---");
+			driver.queryCanAccess();
+			System.out.println("---Privileges Table---");
+			driver.queryPrivilege();
+			System.out.println("---Account Privilege Table---");
+			driver.queryAccountPrivilege();
+			System.out.println("---Relation Privilege Table---");
+			driver.queryRelationPrivilege();
+			System.out.println("---Role Privileges---");
+			driver.queryUserRolePrivilege();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -97,7 +108,7 @@ public class MainApp {
 			driver.addUserAccount(acctNum, acctName, acctPhone);
 		} catch (SQLException e) {
 			System.out.println("Unable to add User account");
-		}
+		}		
 	}
 	
 	public void promptUserRole() {
