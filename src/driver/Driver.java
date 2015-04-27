@@ -54,6 +54,8 @@ public class Driver {
 	PreparedStatement queryRolePrivilege;
 	PreparedStatement queryRoleCanAccess;
 	PreparedStatement querySpecificUserHasRole;
+	PreparedStatement queryRoleCanAccessPrivilege;
+	PreparedStatement queryRolePrivilegePrivilege;
 	/**
 	 * 
 	 */
@@ -138,9 +140,13 @@ public class Driver {
 			stmt="SELECT * FROM CAN_ACCESS WHERE ROLE_NAME = ?";
 			queryRoleCanAccess = connection.prepareStatement(stmt);
 			stmt="SELECT * FROM USER_ROLE_PRIVILEGE WHERE ROLE_NAME = ?";
-			queryUserRolePrivilege = connection.prepareStatement(stmt);
+			queryRolePrivilege = connection.prepareStatement(stmt);
 			stmt="SELECT * FROM HAS_ROLE WHERE USER_ID_NUMBER = ?";
 			querySpecificUserHasRole = connection.prepareStatement(stmt);
+			stmt="SELECT * FROM CAN_ACCESS WHERE ROLE_NAME = ?";
+			queryRoleCanAccessPrivilege = connection.prepareStatement(stmt);
+			stmt="SELECT * FROM USER_ROLE_PRIVILEGE WHERE ROLE_NAME = ?";
+			queryRolePrivilegePrivilege = connection.prepareStatement(stmt);
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -570,7 +576,7 @@ public class Driver {
 	    System.out.println("");
 	}
 	
-	public void queryRolePrivilege() throws SQLException {
+	/*public void queryRolePrivilege() throws SQLException {
 		ResultSet resultSet = queryRolePrivilege.executeQuery();
 		ResultSetMetaData rsmd = resultSet.getMetaData();
 		System.out.printf("%-20s%-20s%-20s",rsmd.getColumnName(1),rsmd.getColumnName(2),rsmd.getColumnName(3));
@@ -580,7 +586,7 @@ public class Driver {
 		    System.out.println("");
 		}
 	    System.out.println("");
-	}
+	}*/
 	
 	public void queryUserRolePrivilege() throws SQLException {
 		ResultSet resultSet = queryUserRolePrivilege.executeQuery();
@@ -607,9 +613,9 @@ public class Driver {
 		}
 	    System.out.println("");
 	    
-	    queryUserRolePrivilege.clearParameters();
-	    queryUserRolePrivilege.setString(1, roleName);
-	    resultSet = queryUserRolePrivilege.executeQuery();
+	    queryRolePrivilege.clearParameters();
+	    queryRolePrivilege.setString(1, roleName);
+	    resultSet = queryRolePrivilege.executeQuery();
 		rsmd = resultSet.getMetaData();
 		System.out.printf("%-20s%-20s",rsmd.getColumnName(1),rsmd.getColumnName(2));
 		System.out.println();
@@ -627,6 +633,28 @@ public class Driver {
 		resultSet.next();
 		queryRoleCanAccess(resultSet.getString(2));
 		
+	}
+	
+	public void queryIfPrivilegeIsGrantedToUser(String privType, String idNum) throws SQLException {
+		//Query for User role
+		querySpecificUserHasRole.clearParameters();
+		querySpecificUserHasRole.setString(1, idNum);
+		ResultSet resultSet = querySpecificUserHasRole.executeQuery();
+		//get user role
+		resultSet.next();
+		String roleName = resultSet.getString(2);
+		//search use role for role privileges
+		/*queryRolePrivilege.clearParameters();
+		queryRolePrivilege.setString(1, roleName);
+		queryRolePrivilege.executeQuery();*/
+		//search user for can access privileges
+		queryRoleCanAccessPrivilege.clearParameters();
+		querySpecificUserHasRole.setString(1, idNum);
+		resultSet = querySpecificUserHasRole.executeQuery();
+		if(resultSet.next())
+			System.out.println("User " + idNum + " does have access to privilege " + privType);			
+		else
+			System.out.println("User " + idNum + " does not have access to privilege " + privType);
 	}
 	
 	private void newFileScanner(File file)

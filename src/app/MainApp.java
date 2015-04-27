@@ -255,6 +255,12 @@ public class MainApp {
 		String privName = input.nextLine();
 		System.out.print("Enter User ID");
 		String idNum = input.nextLine();
+		try {
+			driver.queryIfPrivilegeIsGrantedToUser(privName, idNum);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }
