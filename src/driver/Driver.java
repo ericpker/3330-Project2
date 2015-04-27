@@ -422,10 +422,6 @@ public class Driver {
 	    System.out.println("");
 	}
 	
-	/**
-	 * 
-	 * @throws SQLException
-	 */
 	public void queryUserRole() throws SQLException {
 		ResultSet resultSet = queryUserRole.executeQuery();
 		ResultSetMetaData rsmd = resultSet.getMetaData();
