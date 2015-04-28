@@ -225,11 +225,11 @@ public class MainApp {
 	}
 	
 	public void promptCanAccess() {
-		System.out.print("Enter Relation Privilege Name:");
-		String roleName = input.nextLine();
 		System.out.print("Enter Role Name:");
+		String roleName = input.nextLine();
+		System.out.print("Enter Table Name:");
 		String tblName = input.nextLine();
-		System.out.print("Enter Table Name");
+		System.out.print("Enter Relation Privilege Name:");
 		String privName = input.nextLine();
 		try {
 			driver.addCanAccess(roleName, tblName, privName);
@@ -264,7 +264,7 @@ public class MainApp {
 	public void queryIfPrivilegeIsGrantedToUser() {
 		System.out.print("Enter Privilege:");
 		String privName = input.nextLine();
-		System.out.print("Enter User ID");
+		System.out.print("Enter User ID:");
 		String idNum = input.nextLine();
 		try {
 			driver.queryIfPrivilegeIsGrantedToUser(privName, idNum);

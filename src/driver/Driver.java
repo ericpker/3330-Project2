@@ -143,7 +143,7 @@ public class Driver {
 			queryRolePrivilege = connection.prepareStatement(stmt);
 			stmt="SELECT * FROM HAS_ROLE WHERE USER_ID_NUMBER = ?";
 			querySpecificUserHasRole = connection.prepareStatement(stmt);
-			stmt="SELECT * FROM CAN_ACCESS WHERE ROLE_NAME = ?";
+			stmt="SELECT * FROM CAN_ACCESS WHERE ROLE_NAME = ? and PRIVILEGE_NAME = ?";
 			queryRoleCanAccessPrivilege = connection.prepareStatement(stmt);
 			stmt="SELECT * FROM USER_ROLE_PRIVILEGE WHERE ROLE_NAME = ?";
 			queryRolePrivilegePrivilege = connection.prepareStatement(stmt);
@@ -643,16 +643,18 @@ public class Driver {
 		//get user role
 		resultSet.next();
 		String roleName = resultSet.getString(2);
+		System.out.println(roleName);
 		//search use role for role privileges
 		/*queryRolePrivilege.clearParameters();
 		queryRolePrivilege.setString(1, roleName);
 		queryRolePrivilege.executeQuery();*/
 		//search user for can access privileges
 		queryRoleCanAccessPrivilege.clearParameters();
-		querySpecificUserHasRole.setString(1, idNum);
-		resultSet = querySpecificUserHasRole.executeQuery();
+		queryRoleCanAccessPrivilege.setString(1, roleName);
+		queryRoleCanAccessPrivilege.setString(2, privType);
+		resultSet = queryRoleCanAccessPrivilege.executeQuery();
 		if(resultSet.next())
-			System.out.println("User " + idNum + " does have access to privilege " + privType);			
+			System.out.println("User " + idNum + " does have access to privilege " + privType);	
 		else
 			System.out.println("User " + idNum + " does not have access to privilege " + privType);
 	}
